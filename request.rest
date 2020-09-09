@@ -1,1 +1,3 @@
-GET http://localhost/users?page=3&limit=10
+
+
+GET http://localhost/users?page=1&limit=5&UserRole=Supervisor

@@ -1,6 +1,22 @@
 module.exports = {
   paginatedData: function paginatedData(model) {
     return async (req, res, next) => {
+      const query = req.query;
+      const va = {
+        name: req.query.name,
+        UserRole: req.query.UserRole,
+        Phone: req.query.Phone,
+        Availability: req.query.Availability,
+        Department: req.query.Availability,
+      };
+
+      const filterConditions = Object.keys(va).reduce((result, key) => {
+        if (va[key]) {
+          result[key] = va[key];
+        }
+        return result;
+      }, {});
+
       const page = parseInt(req.query.page);
       const limit = parseInt(req.query.limit);
       const startIndex = (page - 1) * limit;
@@ -22,10 +38,11 @@ module.exports = {
       }
       try {
         results.result = await model
-          .find()
+          .find({ ...filterConditions })
           .limit(limit)
           .skip(startIndex)
           .exec();
+        console.log(results);
         res.paginatedResult = results;
 
         next();
